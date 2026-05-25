@@ -1,4 +1,27 @@
-# `Resumo Inicial`
+# `Libs Back End`
+
+- 1 nodemon
+- 2 bcryptjs
+- 3 cookie-parser
+- 4 crypto
+- 5 dotenv
+- 6 express
+- 7 resend
+- 8 jsonwebtoken
+- 9 mongodb
+- 10 mongoose
+
+-------------------------------------------------------------------------------------------------
+
+# `Libs Front End`
+
+- 1 Axios
+- 2 TailwindCSS
+- 3 ShadcnUI
+
+-------------------------------------------------------------------------------------------------
+
+# `Resumo Inicial Back-End`
 
 - 1  Instalar as dependencias
 - 2  Iniciar o servidor no index.js com uma função assíncrona
@@ -159,3 +182,5 @@ export const sendResetPasswordEmail = async (email, resetURL) => {
     - Verificação
     - Resposta
     - Esse endpoint geralmente é usado para: persistência de autenticação / manter login
+
+-------------------------------------------------------------------------------------------------
