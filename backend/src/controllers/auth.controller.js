@@ -1,0 +1,1 @@
+export const testRouterAuth = (req, res) => res.send("Hello World!");
