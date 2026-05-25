@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 export const ENV_VARIABLES = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     PORT: process.env.PORT,
