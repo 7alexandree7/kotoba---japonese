@@ -1,1 +1,52 @@
-export const testRouterAuth = (req, res) => res.send("Hello World!");
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { User } from "../models/user.models.js";
+import { generateVerificationToken } from "../utils/generateVerificationToken.js";
+import { generatetokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
+import { userNotPassword } from "../utils/userNotPassword.js";
+import { sendVerificationEmail } from "../mail/email.js";
+
+export const testRouterAuth = (req, res) => res.send("Auth route is working");
+
+
+export const signup = async (req, res) => {
+
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
+        const verificationToken = generateVerificationToken();
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await new User({
+            name,
+            email,
+            password: hashedPassword,
+            verificationToken,
+            verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+        })
+
+        await newUser.save();
+        generatetokenAndSetCookie(res, newUser._id);
+        await sendVerificationEmail(email, verificationToken);
+
+        return res.status(201).json({
+            success: true,
+            message: "User registered successfully. Please check your email to verify your account.",
+            data: userNotPassword(newUser)
+        })
+    }
+
+    catch (error) {
+        console.log("Error checking existing user:", error);
+        return res.status(500).json({ message: "Server error" });
+    }
+}

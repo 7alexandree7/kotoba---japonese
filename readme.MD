@@ -54,6 +54,7 @@
 - 5  Com todas as informações em mãos criar um novo usuario no nosso banco de dados
 - 6  `verificationToken` O back end gera um codigo de 6 digitos para o usuario fazer sua auth no seu email
 - 7  utilizar o `await user.save()` para que todas nossas alterações sejam salvas no nosso banco MondoDB
+- 8  Cuidar da parte do envio de email sendVerificationEmail, referente ao codigo de 6 digitos
 
 -------------------------------------------------------------------------------------------------
 
