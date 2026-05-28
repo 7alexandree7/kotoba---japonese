@@ -28,6 +28,77 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
 </html>
 `;
 
+
+export const WELCOME_EMAIL_TEMPLATE = (name) => `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Kotoba</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  
+  <div style="background: linear-gradient(to right, #4CAF50, #45a049); padding: 20px; text-align: center;">
+    <h1 style="color: white; margin: 0;">Welcome to Kotoba 🎌</h1>
+  </div>
+
+  <div style="background-color: #f9f9f9; padding: 20px; border-radius: 0 0 5px 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    
+    <p>Hello <strong>${name}</strong>,</p>
+
+    <p>
+      Your account has been successfully verified and we're excited to have you here!
+    </p>
+
+    <p>
+      Kotoba is your personal space to:
+    </p>
+
+    <ul style="padding-left: 20px;">
+      <li>📚 Save Japanese words</li>
+      <li>📝 Create phrase collections</li>
+      <li>📈 Track your learning progress</li>
+      <li>🎯 Organize your studies with custom statuses</li>
+    </ul>
+
+    <p>
+      Start building your Japanese vocabulary journey today.
+    </p>
+
+    <div style="text-align: center; margin: 30px 0;">
+      <a 
+        href="http://localhost:3000/"
+        style="
+          background-color: #4CAF50;
+          color: white;
+          padding: 12px 24px;
+          text-decoration: none;
+          border-radius: 5px;
+          font-weight: bold;
+          display: inline-block;
+        "
+      >
+        Go to Kotoba
+      </a>
+    </div>
+
+    <p>
+      Best regards,<br>
+      Kotoba Team
+    </p>
+
+  </div>
+
+  <div style="text-align: center; margin-top: 20px; color: #888; font-size: 0.8em;">
+    <p>This is an automated message, please do not reply to this email.</p>
+  </div>
+
+</body>
+</html>
+`;
+
+
 export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
