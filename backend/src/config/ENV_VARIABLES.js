@@ -6,7 +6,8 @@ export const ENV_VARIABLES = {
     PORT: process.env.PORT,
     MONGO_URL: process.env.MONGO_URL,
     JWT_SECRET: process.env.JWT_SECRET,
-    NODE_ENV: process.env.NODE_ENV || "development"
+    NODE_ENV: process.env.NODE_ENV || "development",
+    CLIENT_URL: process.env.CLIENT_URL || "http://localhost:3000"
 }
 
 if (!ENV_VARIABLES.RESEND_API_KEY || !ENV_VARIABLES.RESEND_DOMAIN) {
@@ -27,4 +28,8 @@ if (!ENV_VARIABLES.JWT_SECRET) {
 
 if (!ENV_VARIABLES.NODE_ENV) {
     throw new Error("NODE_ENV is not defined")
+}
+
+if (!ENV_VARIABLES.CLIENT_URL) {
+    throw new Error("CLIENT_URL is not defined")
 }

@@ -4,7 +4,8 @@ import { User } from "../models/user.models.js";
 import { generateVerificationToken } from "../utils/generateVerificationToken.js";
 import { generatetokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import { userNotPassword } from "../utils/userNotPassword.js";
-import { sendVerificationEmail, sendWelcomeEmail } from "../mail/email.js";
+import { sendResetPasswordEmail, sendVerificationEmail, sendWelcomeEmail } from "../mail/email.js";
+import crypto from "crypto";
 
 export const testRouterAuth = (req, res) => res.send("Auth route is working");
 
@@ -116,6 +117,38 @@ export const verifyEmail = async (req, res) => {
         return res.status(200).json({ message: "Email verified successfully" });
     } catch (error) {
         console.log("Error verifying email:", error);
+        return res.status(500).json({ message: "Server error" });
+    }
+}
+
+export const forgotPassword = async (req, res) => {
+
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+    }
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+
+        // Generate reset token
+        const restToken = crypto.randomBytes(20).toString("hex");
+        const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // Set token to expire in 1 hour
+
+        user.resetPasswordToken = restToken;
+        user.resetPasswordExpiresAt = resetTokenExpiresAt;
+        await user.save();
+
+        await sendResetPasswordEmail(user.email, restToken);
+
+        return res.status(200).json({ message: "Password reset email sent successfully" });
+
+    } catch (error) {
+        console.log("Error resetting password:", error);
         return res.status(500).json({ message: "Server error" });
     }
 }

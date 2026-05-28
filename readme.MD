@@ -126,8 +126,8 @@ export const sendWelcomeEmail = async (email, name) => {
 - 1 - usuário digita o email
 - 2 - backend procura o usuário
 - 3 - backend gera um token aleatório
-- 4 - salva esse token no banco
-- 5 - salva uma data de expiração
+- 4 - salva esse token no banco com a lib crypto `crypto.randomBytes(20).toString("hex")`
+- 5 - salva uma data de expiração `Date now() + 1 * 60 * 60 * 1000; // Set token to expire in 1 hour`
 - 6 - envia email com link contendo o token
 - 7 - depois o usuário usa esse token pra criar nova senha `await sendResetPasswordEmail(user.email, ${ENV_VARIABLES.CLIENT_URL}/reset-password/${resetToken});`
 ```
