@@ -4,7 +4,7 @@ import { User } from "../models/user.models.js";
 import { generateVerificationToken } from "../utils/generateVerificationToken.js";
 import { generatetokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import { userNotPassword } from "../utils/userNotPassword.js";
-import { sendResetPasswordEmail, sendVerificationEmail, sendWelcomeEmail } from "../mail/email.js";
+import { sendPasswordResetSuccessEmail, sendResetPasswordEmail, sendVerificationEmail, sendWelcomeEmail } from "../mail/email.js";
 import crypto from "crypto";
 
 export const testRouterAuth = (req, res) => res.send("Auth route is working");
@@ -140,14 +140,14 @@ export const forgotPassword = async (req, res) => {
         }
 
         // Generate reset token
-        const restToken = crypto.randomBytes(20).toString("hex");
+        const resetToken = crypto.randomBytes(20).toString("hex");
         const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // Set token to expire in 1 hour
 
-        user.resetPasswordToken = restToken;
+        user.resetPasswordToken = resetToken;
         user.resetPasswordExpiresAt = resetTokenExpiresAt;
         await user.save();
 
-        await sendResetPasswordEmail(user.email, restToken);
+        await sendResetPasswordEmail(user.email, resetToken);
 
         return res.status(200).json({ message: "Password reset email sent successfully" });
 
@@ -155,4 +155,44 @@ export const forgotPassword = async (req, res) => {
         console.log("Error resetting password:", error);
         return res.status(500).json({ message: "Server error" });
     }
+}
+
+
+export const resetPassword = async (req, res) => {
+
+    const { token } = req.params;
+    const { newPassword } = req.body;
+
+    if (!token) {
+        return res.status(400).json({ message: "Reset token is required" });
+    }
+
+    if (!newPassword) {
+        return res.status(400).json({ message: "New password is required" });
+    }
+
+    try {
+        const user = await User.findOne({ resetPasswordToken: token, resetPasswordExpiresAt: { $gt: Date.now() } });
+
+        if (!user) {
+            return res.status(400).json({ message: "Invalid or expired reset token" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpiresAt = undefined;
+
+        await user.save();
+
+        await sendPasswordResetSuccessEmail(user.email, user.name);
+
+        return res.status(200).json({ message: "Password reset successfully" });
+
+    } catch (error) {
+        console.log("Error resetting password:", error);
+        return res.status(500).json({ message: "Server error" });
+    }
+
 }

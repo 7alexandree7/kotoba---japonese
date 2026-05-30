@@ -10,6 +10,7 @@
 - 8 jsonwebtoken
 - 9 mongodb
 - 10 mongoose
+- 11 Zod
 
 -------------------------------------------------------------------------------------------------
 
@@ -164,6 +165,19 @@ export const sendResetPasswordEmail = async (email, resetURL) => {
 - 8 - Salva as alterações no banco `await user.save()`
 - 9 - Chama a função do resend para enviar um email ao usuario informando sobre a redefinição de senha ` await sendResetSuccessEmail(user.email);`
 - 10 - Devolve a resposta da requisição com try catch `res.status(200).json({ success: true, message: "Password reset successfully" });` ou erro
+
+-------------------------------------------------------------------------------------------------
+
+# `Validação com Zod`
+
+- 1 - Baixar a biblioteca Zod
+- 2 - Criar uma pasta schema/userSchema
+- 3 - Dentro de schema/userSchema criar os schemas registerSchema / loginSchema
+- 4 - 
+- 5 - 
+- 6 - 
+- 7 - 
+
 
 -------------------------------------------------------------------------------------------------
 

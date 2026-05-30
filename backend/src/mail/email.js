@@ -1,6 +1,6 @@
 import { ENV_VARIABLES } from "../config/ENV_VARIABLES.js";
 import { resend } from "../mail/resend.config.js";
-import { PASSWORD_RESET_REQUEST_TEMPLATE, VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE } from "./emailTemplate.js";
+import { PASSWORD_RESET_REQUEST_TEMPLATE, PASSWORD_RESET_SUCCESS_TEMPLATE, VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE } from "./emailTemplate.js";
 
 export const sendVerificationEmail = async (email, verificationCode) => {
     try {
@@ -45,6 +45,22 @@ export const sendResetPasswordEmail = async (email, resetToken) => {
         console.log("Reset password email sent:", response);
     } catch (error) {
         console.error("Error sending reset password email:", error.message);
+        throw error;
+    }
+}
+
+
+export const sendPasswordResetSuccessEmail = async (email, name) => {
+    try {
+        const response = await resend.emails.send({
+            from: ENV_VARIABLES.RESEND_DOMAIN,
+            to: email,
+            subject: "Your Password Has Been Reset",
+            html: PASSWORD_RESET_SUCCESS_TEMPLATE(name)
+        })
+        console.log("Password reset success email sent:", response);
+    } catch (error) {
+        console.error("Error sending password reset success email:", error.message);
         throw error;
     }
 }
