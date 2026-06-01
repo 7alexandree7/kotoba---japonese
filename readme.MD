@@ -172,30 +172,187 @@ export const sendResetPasswordEmail = async (email, resetURL) => {
 
 - 1 - Baixar a biblioteca Zod
 - 2 - Criar uma pasta schema/userSchema
-- 3 - Dentro de schema/userSchema criar os schemas registerSchema / loginSchema
-- 4 - 
-- 5 - 
-- 6 - 
-- 7 - 
+- 3 - Dentro de schema/userSchema criar os schemas registerSchema / loginSchema / verifyEmailSchema
+- 4 - Criar um middleware validate
+  ```
+  export const validate = (schema) => (req, res, next) => {
+
+    const result = schema.safeParse(req.body);
+
+    if (!result.success) {
+        return res.status(400).json({
+            message: "Validation error",
+            errors: result.error.errors.map((err) => ({
+                field: err.path.join('.'),
+                message: err.message
+            }))
+        })
+    }
+
+    req.body = result.data;
+    next();
+   }
+
+  ```
+
+- 5 - Chamar o middleware e o schema na rota
+``` router.post("/signup", validate(registerSchema), signup); ```
+
 
 
 -------------------------------------------------------------------------------------------------
 
-# `Verificar Se este usuario esta autenticado`
+# `Verificar Se Este Usuário Está Autenticado`
 
-- 1 - Criar uma rota do tipo get ("check-auth)
-- 2 - Passar um middleware de verifyToken
-    - Receber o token da req
-    - dentro do try verificar se o token existe
-    - Criar uma variavel decoded para utlizar o `jwt.verify(token, JWT_SECRET)`
-    - Veriicar se não veio o decoded
-    - Adiciona `req.userId = decoded.userId;` a cada requisição que esse middleware for chamado / o JWT já identifica o usuário
-- 3 - Passar o controller de checkAuth
-    - verificar se o usuário autenticado ainda existe
-    - Dentro do bloco try
-    - busca usuário no MongoDB / pega o ID do token
-    - Verificação
-    - Resposta
-    - Esse endpoint geralmente é usado para: persistência de autenticação / manter login
+- 1 - Criar uma rota do tipo GET (`/check-auth`)
+    - Essa rota será chamada quando o frontend abrir a aplicação.
+    - Objetivo: verificar se o usuário continua autenticado.
+
+- 2 - Passar o middleware `verifyToken`
+    - Receber o token através dos cookies da requisição.
+    - Verificar se o token existe.
+    - Criar uma variável `decoded` utilizando:
+      - `jwt.verify(token, JWT_SECRET)`
+    - Verificar se o token é válido.
+    - Verificar se existe `decoded.userId`.
+    - Adicionar:
+      - `req.userId = decoded.userId`
+    - Chamar `next()` para continuar para o controller.
+
+- 3 - Passar o controller `checkAuth`
+    - Receber o `req.userId` vindo do middleware.
+    - Dentro do bloco `try`.
+    - Buscar o usuário no MongoDB:
+      - `User.findById(req.userId)`
+    - Verificar se o usuário ainda existe.
+    - Se não existir:
+      - Retornar erro de autenticação.
+    - Se existir:
+      - Retornar os dados do usuário sem a senha.
+    - Resposta de sucesso:
+      - Usuário autenticado.
+      - Usuário ainda existe no banco.
+
+- 4 - Fluxo completo
+    - Usuário faz login.
+    - JWT é salvo nos cookies.
+    - Usuário fecha o navegador.
+    - Usuário abre o site novamente.
+    - Frontend chama:
+      - `GET /check-auth`
+    - Cookie é enviado automaticamente.
+    - Middleware valida o JWT.
+    - Controller busca o usuário no banco.
+    - Se tudo estiver correto:
+      - Retorna os dados do usuário.
+    - Se algo estiver errado:
+      - Retorna erro de autenticação.
+
+- 5 - Objetivo desse endpoint
+    - Persistência de autenticação.
+    - Manter o usuário logado após atualizar a página.
+    - Evitar que o usuário precise fazer login novamente toda vez que abrir o sistema.
+    - Permitir que o frontend descubra se existe uma sessão válida antes de renderizar páginas protegidas.
+  
 
 -------------------------------------------------------------------------------------------------
+
+# `SISTEMA DE AUTENTICAÇÃO - FLUXO MENTAL`
+
+# `Signup`
+
+- 1 - Recebe `name`, `email`, `password` e `confirmPassword` do body
+- 2 - Verifica se todos os campos foram enviados
+- 3 - Verifica se `password` e `confirmPassword` são iguais
+- 4 - Busca no banco para verificar se já existe usuário com o mesmo e-mail
+- 5 - Gera um código de verificação de 6 dígitos através da função `generateVerificationToken()`
+- 6 - Faz o hash da senha utilizando bcrypt
+- 7 - Cria um novo usuário no MongoDB
+- 8 - Salva o código de verificação e sua data de expiração
+- 9 - Salva o usuário no banco
+- 10 - Gera um JWT através da função `generatetokenAndSetCookie()`
+- 11 - Salva o JWT nos cookies
+- 12 - Envia o e-mail contendo o código de verificação
+- 13 - Retorna os dados do usuário sem a senha
+
+# `Verify Email`
+
+- 1 - Recebe o código de verificação enviado pelo usuário
+- 2 - Busca um usuário com o mesmo código de verificação
+- 3 - Verifica se o código ainda não expirou
+- 4 - Caso não encontre retorna erro
+- 5 - Define `user.isVerified = true`
+- 6 - Remove `verificationToken`
+- 7 - Remove `verificationTokenExpiresAt`
+- 8 - Salva as alterações no banco
+- 9 - Envia o e-mail de boas-vindas
+- 10 - Retorna sucesso na verificação
+
+# `Login`
+
+- 1 - Recebe `email` e `password`
+- 2 - Verifica se todos os campos foram enviados
+- 3 - Busca usuário pelo e-mail
+- 4 - Verifica se o usuário existe
+- 5 - Compara a senha digitada com a senha criptografada usando bcrypt
+- 6 - Verifica se a senha está correta
+- 7 - Gera um JWT utilizando o ID do usuário
+- 8 - Salva o JWT nos cookies
+- 9 - Atualiza `lastLogin`
+- 10 - Salva as alterações no banco
+- 11 - Retorna os dados do usuário sem a senha
+
+# `Logout`
+
+- 1 - Recebe a requisição de logout
+- 2 - Remove o cookie `token`
+- 3 - Retorna sucesso para o frontend
+- 4 - Usuário deixa de estar autenticado
+
+# `Forgot Password`
+
+- 1 - Recebe o e-mail do usuário
+- 2 - Busca usuário pelo e-mail
+- 3 - Verifica se o usuário existe
+- 4 - Gera um token aleatório utilizando `crypto.randomBytes`
+- 5 - Define uma data de expiração para o token
+- 6 - Salva `resetPasswordToken`
+- 7 - Salva `resetPasswordExpiresAt`
+- 8 - Salva as alterações no banco
+- 9 - Envia um e-mail contendo o link de redefinição de senha
+- 10 - Retorna sucesso
+
+
+# `Reset Password`
+
+- 1 - Criar rota dinâmica com o token `router.post('/reset-password/:token', resetPassword)`
+- 2 - Recebe o token do params da URL
+- 3 - Recebe a nova senha do body
+- 4 - Encontra o usuário vinculado ao token que quer redefinir a senha
+- 5 - Verifica se o token ainda não expirou
+- 6 - Faz o hash com bcrypt na nova senha escolhida pelo usuário
+- 7 - Atribui a nova senha ao banco
+- 8 - Remove `resetPasswordToken`
+- 9 - Remove `resetPasswordExpiresAt`
+- 10 - Salva as alterações no banco
+- 11 - Envia e-mail informando que a senha foi alterada com sucesso
+- 12 - Retorna sucesso ou erro utilizando try catch
+
+
+# `Check Auth`
+
+- 1 - Criar uma rota protegida do tipo GET `/check-auth`
+- 2 - Adicionar o middleware `verifyToken` antes do controller
+- 3 - Middleware recebe o token através dos cookies da requisição
+- 4 - Verifica se o token existe
+- 5 - Utiliza `jwt.verify(token, JWT_SECRET)` para validar e decodificar o JWT
+- 6 - Verifica se o token é válido e se retornou o objeto `decoded`
+- 7 - Obtém o ID do usuário através de `decoded.userId`
+- 8 - Adiciona o ID na requisição `req.userId = decoded.userId`
+- 9 - Chama `next()` para liberar acesso ao controller
+- 10 - Controller recebe o ID através de `req.userId`
+- 11 - Busca o usuário no MongoDB utilizando `User.findById(req.userId)`
+- 12 - Verifica se o usuário ainda existe no banco
+- 13 - Caso não exista retorna `401 Unauthorized`
+- 14 - Caso exista retorna os dados do usuário sem a senha utilizando `userNotPassword(user)`
+- 15 - Devolve a resposta da requisição com try catch `res.status(200).json({ success: true, message: "User is authenticated", data: userNotPassword(user) })`

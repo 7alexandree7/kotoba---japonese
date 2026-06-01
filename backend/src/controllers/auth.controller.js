@@ -194,5 +194,24 @@ export const resetPassword = async (req, res) => {
         console.log("Error resetting password:", error);
         return res.status(500).json({ message: "Server error" });
     }
+}
 
+
+export const checkAuth = async (req, res) => {
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "User is authenticated",
+            data: userNotPassword(user)
+        })
+
+    } catch (error) {
+        console.log("Error checking authentication:", error);
+        return res.status(500).json({ message: "Server error" });
+    }
 }
