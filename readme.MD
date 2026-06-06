@@ -356,3 +356,86 @@ export const sendResetPasswordEmail = async (email, resetURL) => {
 - 13 - Caso não exista retorna `401 Unauthorized`
 - 14 - Caso exista retorna os dados do usuário sem a senha utilizando `userNotPassword(user)`
 - 15 - Devolve a resposta da requisição com try catch `res.status(200).json({ success: true, message: "User is authenticated", data: userNotPassword(user) })`
+
+
+# `Autorização`
+
+- O que é Autorização?
+  - Autorização responde a pergunta: / O que este usuário pode fazer? /  Enquanto autenticação responde: Quem é este usuário?
+  
+- O que é uma permissão? - Exemplo para o Kotoba 
+  - Usuário comum
+```
+Pode: ✅
+
+Criar palavras
+Criar frases
+Editar suas próprias palavras
+Editar suas próprias frases
+
+Não Pode: ❌
+
+Ver dashboard admin
+Excluir usuários
+```
+
+  - Usuário Admin
+```
+Pode: ✅
+
+Criar palavras
+Criar frases
+Editar qualquer conteúdo
+Excluir qualquer conteúdo
+Gerenciar usuários
+Acessar dashboard admin
+```
+
+
+```
+Request
+
+verifyToken
+
+Usuário identificado
+
+Busca usuário no banco
+
+Role encontrada
+
+role = admin
+
+Acesso permitido
+
+Controller executa
+```
+
+- O objetivo da autorização não é: `Descobrir quem é o usuário` Isso a autenticação já fez.
+  - O objetivo é: `Verificar se ele possui a permissão necessária`
+
+```
+O verdadeiro papel da Role
+Muita gente pensa:
+Role = admin
+
+Mas na verdade é:
+Role
+↓
+Conjunto de permissões
+
+Exemplo:
+
+Admin
+
+Pode:
+- Gerenciar usuários
+- Gerenciar conteúdo
+- Ver estatísticas
+```
+
+![imagem referente a regras de autorização](docs/assets/image.png)
+
+```
+- Etapa 1:  Adicionar role. ✅
+- Etapa 2: Promover seu usuário para admin no MongoDB / Para validar que a modelagem funciona.
+```
