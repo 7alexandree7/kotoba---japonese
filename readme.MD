@@ -437,5 +437,6 @@ Pode:
 
 ```
 - Etapa 1:  Adicionar role. ✅
-- Etapa 2: Promover seu usuário para admin no MongoDB / Para validar que a modelagem funciona.
+- Etapa 2: Promover seu usuário para admin no MongoDB / Para validar que a modelagem funciona. ✅
+- Etapa 3: Criar um middleware: isAdmin
 ```

@@ -40,7 +40,6 @@ export const signup = async (req, res) => {
         })
 
         await newUser.save();
-        console.log(newUser.role);
         generatetokenAndSetCookie(res, newUser._id);
         await sendVerificationEmail(email, verificationToken);
 
@@ -201,19 +200,22 @@ export const resetPassword = async (req, res) => {
 
 export const checkAuth = async (req, res) => {
     try {
-        const user = await User.findById(req.userId);
-        if (!user) {
-            return res.status(401).json({ message: "Unauthorized" });
+        if (!req.user) {
+            return res.status(401).json({
+                message: "Unauthorized"
+            });
         }
 
         return res.status(200).json({
             success: true,
             message: "User is authenticated",
-            data: userNotPassword(user)
-        })
+            data: req.user
+        });
 
     } catch (error) {
         console.log("Error checking authentication:", error);
-        return res.status(500).json({ message: "Server error" });
+        return res.status(500).json({
+            message: "Server error"
+        });
     }
 }
