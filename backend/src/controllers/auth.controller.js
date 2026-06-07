@@ -11,9 +11,9 @@ export const testRouterAuth = (req, res) => res.send("Auth route is working");
 
 export const signup = async (req, res) => {
 
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, confirmPassword, role } = req.body;
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password || !confirmPassword || !role) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -34,11 +34,13 @@ export const signup = async (req, res) => {
             name,
             email,
             password: hashedPassword,
+            role,
             verificationToken,
             verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
         })
 
         await newUser.save();
+        console.log(newUser.role);
         generatetokenAndSetCookie(res, newUser._id);
         await sendVerificationEmail(email, verificationToken);
 
