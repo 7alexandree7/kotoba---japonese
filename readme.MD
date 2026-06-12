@@ -434,3 +434,34 @@ Pode:
 ```
 
 ![imagem referente a regras de autorização](docs/assets/image.png)
+
+- 1 - Adicionar o campo `role` no model User
+- 2 - Definir o valor padrão como `"user"`
+- 3 - Restringir os valores possíveis utilizando `enum: ["user", "admin"]`
+- 4 - Criar o middleware `verifyToken`
+- 5 - Middleware recebe o token através dos cookies da requisição
+- 6 - Verifica se o token existe
+- 7 - Utiliza `jwt.verify(token, JWT_SECRET)` para validar e decodificar o JWT
+- 8 - Verifica se o token é válido e se retornou o objeto `decoded`
+- 9 - Obtém o ID do usuário através de `decoded.userId`
+- 10 - Busca o usuário no MongoDB utilizando `User.findById(decoded.userId)`
+- 11 - Verifica se o usuário ainda existe no banco
+- 12 - Remove informações sensíveis utilizando `userNotPassword(user)`
+- 13 - Adiciona os dados do usuário na requisição `req.user = userNotPassword(user)`
+- 14 - Chama `next()` para liberar acesso ao próximo middleware
+- 15 - Criar o middleware `isAdmin`
+- 16 - Middleware recebe os dados do usuário através de `req.user`
+- 17 - Verifica se o usuário possui a role `"admin"`
+- 18 - Caso a role seja diferente de `"admin"` retorna `403 Forbidden`
+- 19 - Caso a role seja `"admin"` chama `next()`
+- 20 - Criar uma rota protegida de teste GET `/test-admin`
+- 21 - Adicionar os middlewares na ordem `verifyToken, isAdmin`
+- 22 - Requisição chega primeiro no `verifyToken`
+- 23 - Usuário é autenticado através do JWT
+- 24 - Dados do usuário são adicionados em `req.user`
+- 25 - Requisição segue para o middleware `isAdmin`
+- 26 - Middleware verifica `req.user.role`
+- 27 - Caso seja `"admin"` libera acesso ao controller
+- 28 - Controller executa normalmente
+- 29 - Retorna `200 OK`
+- 30 - Resposta confirma que o usuário possui permissão para acessar recursos administrativos
