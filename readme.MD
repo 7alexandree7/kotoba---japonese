@@ -481,3 +481,12 @@ Pode:
 # `Cadastro de palavras`
 
 - 1 - Criar o model words.js
+
+reviewCount = 0
+→ Nunca revisada
+
+reviewCount = 1~4
+→ Em aprendizado
+
+reviewCount >= 5
+→ Aprendida

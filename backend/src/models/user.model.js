@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema({
     verificationToken: String,
     verificationTokenExpiresAt: Date,
 
+    studyStreak: { type: Number, default: 0 },
+    lastStudyDate: { type: Date },
+
 }, { timestamps: true });
 
 export const User = mongoose.model("User", userSchema);

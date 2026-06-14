@@ -10,8 +10,14 @@ const wordSchema = new mongoose.Schema({
         type: String, enum: ["Substantivo", "Verbo", "Adjetivo", "Advérbio", "Partícula", "Expressão", "Outro"]
     },
     jlptLevel: { type: String, enum: ["N5", "N4", "N3", "N2", "N1"] },
+
     isFavorite: { type: Boolean, default: false },
-    isLearned: { type: Boolean, default: false },
+
+    reviewCount: { type: Number, default: 0 },
+    lastReviewedAt: { type: Date },
+    nextReviewAt: { type: Date },
+    difficulty: { type: String, enum: ["Fácil", "Médio", "Difícil"], required: true },
+    
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 }, { timestamps: true });
 
