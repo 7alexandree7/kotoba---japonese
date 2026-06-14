@@ -7,9 +7,9 @@ const wordSchema = new mongoose.Schema({
     example: { type: String, required: true },
     exampleTranslation: { type: String, required: true },
     category: {
-        type: String, enum: ["Substantivo", "Verbo", "Adjetivo", "Advérbio", "Partícula", "Expressão", "Outro"]
+        type: String, required: true, enum: ["Substantivo", "Verbo", "Adjetivo", "Advérbio", "Partícula", "Expressão", "Outro"]
     },
-    jlptLevel: { type: String, enum: ["N5", "N4", "N3", "N2", "N1"] },
+    jlptLevel: { type: String, enum: ["N5", "N4", "N3", "N2", "N1", "Outro"], required: true },
 
     isFavorite: { type: Boolean, default: false },
 
