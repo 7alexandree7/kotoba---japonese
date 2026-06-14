@@ -1,4 +1,4 @@
-import { User } from "../models/user.models.js";
+import { User } from "../models/user.model";
 
 export const testAdminRoute = (req, res) => {
     return res.status(200).json({

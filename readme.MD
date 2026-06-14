@@ -465,3 +465,19 @@ Pode:
 - 28 - Controller executa normalmente
 - 29 - Retorna `200 OK`
 - 30 - Resposta confirma que o usuário possui permissão para acessar recursos administrativos
+
+-------------------------------------------------------------------------------------------------
+
+`O que o usuário faz depois de logar?`
+
+- O usuário cadastra:
+  - Palavras
+  - Frases
+  - Kanjis
+
+-------------------------------------------------------------------------------------------------
+
+
+# `Cadastro de palavras`
+
+- 1 - Criar o model words.js

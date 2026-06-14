@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { User } from "../models/user.models.js";
+import { User } from "../models/user.model.js";
 import { generateVerificationToken } from "../utils/generateVerificationToken.js";
 import { generatetokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import { userNotPassword } from "../utils/userNotPassword.js";
