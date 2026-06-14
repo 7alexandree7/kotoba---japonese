@@ -8,7 +8,7 @@ export const wordsSchema = z.object({
     example: z.string().trim().min(4, "Example sentence is required"),
     exampleTranslation: z.string().trim().min(4, "Example translation is required"),
 
-    category: z.enum(["Substantivo", "Verbo", "Adjetivo", "Advérbio", "Partícula", "Expressão", "Outro"]).required(),
-    jlptLevel: z.enum(["N5", "N4", "N3", "N2", "N1", "Outro"]).required(),
-    difficulty: z.enum(["Fácil", "Médio", "Difícil"]).required(),
+    category: z.enum(["Substantivo", "Verbo", "Adjetivo", "Advérbio", "Partícula", "Expressão", "Outro"]),
+    jlptLevel: z.enum(["N5", "N4", "N3", "N2", "N1", "Outro"]),
+    difficulty: z.enum(["Fácil", "Médio", "Difícil"])
 })

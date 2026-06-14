@@ -1,4 +1,4 @@
-import { User } from "../models/user.model";
+import { User } from "../models/user.model.js";
 
 export const testAdminRoute = (req, res) => {
     return res.status(200).json({
@@ -38,7 +38,7 @@ export const updateUserRole = async (req, res) => {
     }
 
     try {
-        const user = await User.findByIdAndUpdate(userId, { role }, { new: true });
+        const user = await User.findByIdAndUpdate(userId, { role }, { returnDocument: "after" });
 
         if (!user) {
             return res.status(404).json({
