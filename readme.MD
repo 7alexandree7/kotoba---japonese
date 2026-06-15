@@ -478,9 +478,54 @@ Pode:
 -------------------------------------------------------------------------------------------------
 
 
-# `Cadastro de palavras`
+# `Cadastro de palavras - Words`
 
 - 1 - Criar o model words.js
+- 2 - Criar o Schema com o Zod para a validação dos dados vindo do body, utilizando em conjunto com o middlleware validate
+- 3 - Organizar a estrutura de arquivos e pastas na aplicação para receber as rotas e controllers na arquitetura correta, tudo no seu devido lugar
+- 4 - Criar as rotas de Words
+- 5 - Criar os Controllers de Words
+
+- `Aprendizado`
+  - 1 Quando for Atualizar uma rota dentro do seu CRUD utilizando o mongoDB com mongoose no lugar do `{new: true}` mudar para `{ returnDocument: "after" }`, eles messmo indicam a mudança para nova versão
+  - 2 Para garantir que um usuário só possa acessar, editar ou excluir os próprios dados, utilizar filtros combinando o ID do documento com o ID do usuário autenticado.
+
+```
+Exemplo:
+
+{
+    _id: id,
+    user: req.user._id
+}
+```
+
+  - Isso faz o MongoDB procurar apenas documentos que pertençam ao usuário logado, aumentando a segurança da 
+  - 3 O método populate() permite buscar dados relacionados de outra coleção utilizando um campo com ref.
+```
+Exemplo:
+
+Word.find()
+    .populate("user", "name email")
+
+Nesse caso o Mongoose substitui automaticamente o ObjectId armazenado em "user" pelos dados do usuário, retornando apenas os campos "name" e "email".
+
+Sem populate:
+
+{
+    "user": "6a24c830a12abbd97773970b"
+}
+
+Com populate:
+
+{
+    "user": {
+        "name": "Marcos",
+        "email": "alexandre020602@gmail.com"
+    }
+}
+
+Muito útil para áreas administrativas, relatórios e relacionamentos entre coleções.
+```
 
 reviewCount = 0
 → Nunca revisada
@@ -489,4 +534,4 @@ reviewCount = 1~4
 → Em aprendizado
 
 reviewCount >= 5
-→ Aprendida
+→ Aprendidas
