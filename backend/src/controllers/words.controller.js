@@ -3,7 +3,7 @@ import { Word } from "../models/words.model.js";
 
 export const createWord = async (req, res) => {
 
-    const { japanese, reading, meaning, example, exampleTranslation, category, jlptLevel, difficulty } = req.body;
+    const { japanese, reading, meaning, example, exampleTranslation, category, jlptLevel, difficulty, notes } = req.body;
 
     try {
         const newWord = new Word({
@@ -135,5 +135,48 @@ export const getWordsById = async (req, res) => {
             success: false,
             error: error.message
         });
+    }
+}
+
+
+export const searchMyWords = async (req, res) => {
+
+    const { query } = req.query;
+
+    if (!query) {
+        return res.status(400).json({ message: "Query de pesquisa obrigatória." });
+    }
+
+    try {
+        const words = await Word.find({
+            user: req.user._id,
+            $or: [
+                {
+                    japanese: {
+                        $regex: query,
+                        $options: "i"
+                    }
+                },
+                {
+                    meaning: {
+                        $regex: query,
+                        $options: "i"
+                    }
+                }
+            ]
+        })
+
+        res.status(200).json({
+            message: `Palavras encontradas com sucesso!`,
+            success: true,
+            words: words
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Erro ao pesquisar as palavras.",
+            success: false,
+            error: error.message
+        })
     }
 }

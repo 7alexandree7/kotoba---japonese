@@ -487,8 +487,8 @@ Pode:
 - 5 - Criar os Controllers de Words
 
 - `Aprendizado`
-  - 1 Quando for Atualizar uma rota dentro do seu CRUD utilizando o mongoDB com mongoose no lugar do `{new: true}` mudar para `{ returnDocument: "after" }`, eles messmo indicam a mudança para nova versão
-  - 2 Para garantir que um usuário só possa acessar, editar ou excluir os próprios dados, utilizar filtros combinando o ID do documento com o ID do usuário autenticado.
+  - `1` Quando for Atualizar uma rota dentro do seu CRUD utilizando o mongoDB com mongoose no lugar do `{new: true}` mudar para `{ returnDocument: "after" }`, eles messmo indicam a mudança para nova versão
+  - `2` Para garantir que um usuário só possa acessar, editar ou excluir os próprios dados, utilizar filtros combinando o ID do documento com o ID do usuário autenticado.
 
 ```
 Exemplo:
@@ -500,7 +500,7 @@ Exemplo:
 ```
 
   - Isso faz o MongoDB procurar apenas documentos que pertençam ao usuário logado, aumentando a segurança da 
-  - 3 O método populate() permite buscar dados relacionados de outra coleção utilizando um campo com ref.
+  - `3` O método populate() permite buscar dados relacionados de outra coleção utilizando um campo com ref.
 ```
 Exemplo:
 
@@ -525,6 +525,39 @@ Com populate:
 }
 
 Muito útil para áreas administrativas, relatórios e relacionamentos entre coleções.
+```
+
+
+- `4` O operador $or
+    - Uma das condições abaixo precisa ser verdadeira
+    - japanese combina OU meaning combina
+
+- `5` O que é $regex?
+     - Regex significa: / Expressão regular
+     - Mas aqui você está usando da forma mais simples:
+     - `$regex: query`
+     - Se:
+          - query = "com"
+          - ele encontra:
+          - Comer / comer / COMER / comida dependendo da configuração.
+
+- `6` O que é $options: "i"?
+     - Ignorar maiúsculas e minúsculas
+
+
+```
+Pegue todas as palavras
+
+que pertencem ao usuário logado
+
+E
+
+onde o japonês contenha o texto pesquisado
+
+OU
+
+onde o significado contenha o texto pesquisado
+
 ```
 
 reviewCount = 0

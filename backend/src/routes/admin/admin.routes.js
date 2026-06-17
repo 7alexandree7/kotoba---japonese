@@ -7,12 +7,12 @@ const router = Router();
 
 router.get("/test-admin", verifyToken, isAdmin, testAdminRoute);
 router.get("/get-all-users", verifyToken, isAdmin, getAllUsers);
-//router.get("/get-all-words", verifyToken, isAdmin, getAllWords);
+router.get("/get-all-words", verifyToken, isAdmin, getAllWords);
 
 router.put("/update-user-role/:userId", verifyToken, isAdmin, updateUserRole);
 
 router.delete("/delete-any-user/:userId", verifyToken, isAdmin, deleteAnyUser);
-//router.delete("/delete-any-word/:wordId", verifyToken, isAdmin, deleteAnyWord);
+router.delete("/delete-any-word/:wordId", verifyToken, isAdmin, deleteAnyWord);
 
 
 export default router;
