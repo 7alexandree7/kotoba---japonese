@@ -568,3 +568,13 @@ reviewCount = 1~4
 
 reviewCount >= 5
 → Aprendidas
+
+```
+PUT
+↓
+Editar vários campos do recurso
+
+PATCH
+↓
+Editar um estado ou poucos campos específicos
+```

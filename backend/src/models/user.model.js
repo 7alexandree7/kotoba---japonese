@@ -18,4 +18,20 @@ const userSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
+
+userSchema.pre("findOneAndDelete", async function (next) {
+    try {
+        const user = await this.model.findOne(this.getFilter());
+        if (user) {
+            await mongoose.model("Word").deleteMany({ user: user._id })
+        }
+
+        next();
+
+    } catch (error) {
+        next(error);
+    }
+
+})
+
 export const User = mongoose.model("User", userSchema);

@@ -180,3 +180,63 @@ export const searchMyWords = async (req, res) => {
         })
     }
 }
+
+
+export const getMyFavoriteWords = async (req, res) => {
+
+    try {
+        const words = await Word.find({ user: req.user._id, isFavorite: true });
+
+        if (words.length === 0) {
+            res.status(200).json({
+                message: "Nenhuma palavra favorita encontrada.",
+            });
+            return
+        }
+
+        res.status(200).json({
+            message: "Palavras favoritas recuperadas com sucesso!",
+            success: true,
+            words: words
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Erro ao recuperar as palavras favoritas.",
+            success: false,
+            error: error.message
+        });
+    }
+}
+
+
+export const toggleFavoriteWord = async (req, res) => {
+
+    const { id } = req.params;
+
+    if(!id) {
+        return res.status(400).json({ message: "ID da palavra obrigatório." });
+    }
+
+    try {
+        const words = await Word.findOne( {user: req.user._id, _id: id} );
+
+        if(!words) {
+            return res.status(404).json({ message: "Palavra não encontrada." });
+        }
+
+        words.isFavorite = !words.isFavorite;
+        await words.save();
+
+        res.status(200).json({
+            message: `Palavra ${words.japanese} atualizada com sucesso!`,
+            success: true,
+            word: words
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Erro ao atualizar a palavra.",
+            success: false,
+            error: error.message
+        });
+    }
+}
