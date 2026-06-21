@@ -219,6 +219,10 @@ export const sendResetPasswordEmail = async (email, resetURL) => {
       - `req.userId = decoded.userId`
     - Chamar `next()` para continuar para o controller.
 
+```
+![alt text](docs/assets/image2.png)
+```
+
 - 3 - Passar o controller `checkAuth`
     - Receber o `req.userId` vindo do middleware.
     - Dentro do bloco `try`.
