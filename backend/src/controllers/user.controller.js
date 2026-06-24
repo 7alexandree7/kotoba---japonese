@@ -23,6 +23,33 @@ export const getMyProfile = async (req, res) => {
     }
 }
 
+
+export const updateProfile = async (req, res) => {
+
+    const { name, email } = req.body;
+
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.user._id, { ...req.body }, { returnDocument: "after" });
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "Usuário não encontrado." });
+        }
+
+        return res.status(200).json({
+            message: "Perfil do usuário atualizado com sucesso.",
+            success: true,
+            user: userNotPassword(updatedUser)
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao atualizar o perfil do usuário.",
+            success: false,
+            error: error.message
+        });
+    }
+}
+
+
 export const deleteAccount = async (req, res) => {
 
     try {
