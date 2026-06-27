@@ -582,3 +582,24 @@ PATCH
 ↓
 Editar um estado ou poucos campos específicos
 ```
+
+
+```
+Quando o filtro é opcional, monte um objeto dinamicamente.
+
+1. Crie um filtro base
+2. Adicione propriedades apenas se elas existirem
+3. Passe o objeto para o find()
+
+Exemplo:
+
+const filter = {
+    user: req.user._id
+};
+
+if (difficulty) {
+    filter.difficulty = difficulty;
+}
+
+const words = await Word.find(filter);
+```

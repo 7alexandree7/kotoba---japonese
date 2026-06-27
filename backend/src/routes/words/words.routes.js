@@ -1,8 +1,18 @@
 import { Router } from "express";
 import { validate } from "../../middlewares/validateUser.js";
 import { wordsSchema } from "../../schema/words.schema.js";
-import {verifyToken} from "../../middlewares/verifyToken.js";
-import { createWord, updateWord, deleteWord, getMyWords, getWordsById, searchMyWords, getMyFavoriteWords, toggleFavoriteWord } from "../../controllers/words.controller.js";
+import { verifyToken } from "../../middlewares/verifyToken.js";
+import {
+    createWord,
+    updateWord,
+    deleteWord,
+    getMyWords,
+    getWordsById,
+    searchMyWords,
+    getMyFavoriteWords,
+    toggleFavoriteWord,
+    filterWords
+} from "../../controllers/words.controller.js";
 
 
 const router = Router();
@@ -17,6 +27,8 @@ router.get("/get-my-favorite-words", verifyToken, getMyFavoriteWords);
 router.patch("/toggle-favorite/:id", verifyToken, toggleFavoriteWord);
 
 router.get("/get-word/:id", verifyToken, getWordsById);
+
 router.get("/search-my-words", verifyToken, searchMyWords);
+router.get("/filter-words", verifyToken, filterWords);
 
 export default router;
