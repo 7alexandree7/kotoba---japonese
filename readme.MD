@@ -62,7 +62,7 @@
 
 # `JWT & COOKIES`
 
-- 1  Criar no .env um JWT_SECRET
+- 1  Criar no .env um JWT_SECRET -
 - 2  Dentro de utils criar uma função `generatetokenAndSetCookie`
 - 3  Utilizar o método signin, passando o userId, o JWT_SECRETS e o expires_in
 - 4  na resposta do back-end pro font ele vai salvar nos cookies do navegador uma chave chamada "token" com o valor token
