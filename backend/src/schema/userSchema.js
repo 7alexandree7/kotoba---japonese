@@ -22,3 +22,15 @@ export const loginSchema = z.object({
 export const verifyEmailSchema = z.object({
     code: z.string().regex(/^\d{6}$/, "Verification code must contain exactly 6 digits")
 })
+
+
+export const changePassword = z.object({
+    password: z.string().trim().min(6, "Password must be at least 6 characters"),
+    newPassword: z.string().trim().min(6, "New password must be at least 6 characters"),
+    confirmPassword: z.string().trim().min(6, "Confirm password must be at least 6 characters"),
+
+}).refine((data) => data.newPassword === data.confirmPassword,
+    {
+        message: "Passwords do not match",
+        path: ["confirmPassword"]
+    })
