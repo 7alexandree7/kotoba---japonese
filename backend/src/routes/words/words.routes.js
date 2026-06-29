@@ -12,7 +12,8 @@ import {
     getMyFavoriteWords,
     toggleFavoriteWord,
     filterWords,
-    reviewWord
+    reviewWord,
+    wordsToReview
 } from "../../controllers/words.controller.js";
 
 
@@ -33,5 +34,6 @@ router.get("/search-my-words", verifyToken, searchMyWords);
 router.get("/filter-words", verifyToken, filterWords);
 
 router.patch("/review-word/:id", verifyToken, reviewWord)
+router.get("/words-to-review", verifyToken, wordsToReview)
 
 export default router;

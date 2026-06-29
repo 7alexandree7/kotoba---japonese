@@ -5,13 +5,14 @@ export const createWord = async (req, res) => {
     try {
         const newWord = new Word({
             ...req.body,
-            user: req.user._id
+            user: req.user._id,
+            nextReviewAt: new Date()
         })
 
 
         await newWord.save();
 
-        res.status(201).json({
+        return res.status(201).json({
             message: "Palavra criada com sucesso!",
             success: true,
             word: newWord
@@ -343,6 +344,45 @@ export const reviewWord = async (req, res) => {
     catch(error) {
         return res.status(500).json({
             message: `Erro ao revisar a palavra`,
+            success: false,
+            error: error.message
+        })
+    }
+}
+
+
+
+export const wordsToReview = async (req, res) => {
+
+    try {
+        const words = await Word.find({
+            user: req.user._id,
+            nextReviewAt: {
+                $lte: new Date()
+            }
+        })
+
+        if (words.length === 0) {
+            return res.status(200).json({
+                message: "Nenhuma palavra encontrada para revisão",
+                success: true,
+                total: 0,
+                words: []
+            })
+        }
+
+
+        return res.status(200).json({
+            message: "Palavras disponíveis para revisão.",
+            success: true,
+            total: words.length,
+            words
+        })
+    }
+
+    catch(error) {
+        return res.status(500).json({
+            message: "Erro ao encontrar palavras a revisar",
             success: false,
             error: error.message
         })
