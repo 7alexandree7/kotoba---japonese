@@ -40,7 +40,7 @@ export const updateWord = async (req, res) => {
             _id: id, user: req.user._id
         }, req.body, { returnDocument: "after" });
 
-        if(!word) {
+        if (!word) {
             return res.status(404).json({ message: "Palavra nao encontrada." });
         }
 
@@ -307,5 +307,44 @@ export const filterWords = async (req, res) => {
             error: error.message
         });
     }
+}
 
+
+
+export const reviewWord = async (req, res) => {
+
+    const { id } = req.params;
+
+    try {
+        const word = await Word.findOne({
+            user: req.user._id, _id: id
+        })
+
+        if (!word) {
+            return res.status(404).json({
+                message: "Palavra não encontrada ou não pertence ao usuário.",
+                success: false,
+            })
+        }
+
+        word.reviewCount++
+        word.lastReviewedAt = new Date();
+        word.nextReviewAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+
+        await word.save()
+
+        return res.status(200).json({
+            message: "Palavra revisada com sucesso",
+            success: true,
+            word
+        })
+    }
+
+    catch(error) {
+        return res.status(500).json({
+            message: `Erro ao revisar a palavra`,
+            success: false,
+            error: error.message
+        })
+    }
 }
