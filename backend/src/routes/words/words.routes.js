@@ -13,7 +13,8 @@ import {
     toggleFavoriteWord,
     filterWords,
     reviewWord,
-    wordsToReview
+    wordsToReview,
+    wordsStats
 } from "../../controllers/words.controller.js";
 
 
@@ -33,7 +34,9 @@ router.get("/get-word/:id", verifyToken, getWordsById);
 router.get("/search-my-words", verifyToken, searchMyWords);
 router.get("/filter-words", verifyToken, filterWords);
 
-router.patch("/review-word/:id", verifyToken, reviewWord)
-router.get("/words-to-review", verifyToken, wordsToReview)
+router.patch("/review-word/:id", verifyToken, reviewWord);
+router.get("/words-to-review", verifyToken, wordsToReview);
+router.get("/words-stats", verifyToken, wordsStats);
+
 
 export default router;

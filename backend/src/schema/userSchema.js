@@ -24,7 +24,7 @@ export const verifyEmailSchema = z.object({
 })
 
 
-export const changePassword = z.object({
+export const changePasswordSchema = z.object({
     password: z.string().trim().min(6, "Password must be at least 6 characters"),
     newPassword: z.string().trim().min(6, "New password must be at least 6 characters"),
     confirmPassword: z.string().trim().min(6, "Confirm password must be at least 6 characters"),
