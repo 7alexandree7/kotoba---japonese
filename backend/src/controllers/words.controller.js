@@ -341,7 +341,7 @@ export const reviewWord = async (req, res) => {
         })
     }
 
-    catch(error) {
+    catch (error) {
         return res.status(500).json({
             message: `Erro ao revisar a palavra`,
             success: false,
@@ -380,7 +380,7 @@ export const wordsToReview = async (req, res) => {
         })
     }
 
-    catch(error) {
+    catch (error) {
         return res.status(500).json({
             message: "Erro ao encontrar palavras a revisar",
             success: false,
@@ -388,3 +388,50 @@ export const wordsToReview = async (req, res) => {
         })
     }
 }
+
+
+export const wordsStats = async (req, res) => {
+    
+    try {
+        const totalWords = await Word.countDocuments({
+            user: req.user._id,
+        });
+
+        const favoriteWords = await Word.countDocuments({
+            user: req.user._id,
+            isFavorite: true,
+        });
+
+        const wordsToReview = await Word.countDocuments({
+            user: req.user._id,
+            nextReviewAt: { $lte: new Date() },
+        });
+
+        const words = await Word.find(
+            { user: req.user._id },
+            { reviewCount: 1 }
+        );
+
+        const totalReviews = words.reduce(
+            (sum, word) => sum + word.reviewCount,
+            0
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Estatísticas recuperadas com sucesso.",
+            stats: {
+                totalWords,
+                favoriteWords,
+                wordsToReview,
+                totalReviews,
+            },
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Erro ao recuperar estatísticas.",
+            error: error.message,
+        });
+    }
+};
