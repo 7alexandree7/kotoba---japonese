@@ -114,3 +114,32 @@ export const getMySentences = async (req, res) => {
         })
     }
 }
+
+
+export const getMySentenceById = async (req, res) => {
+
+    const { id } = req.params;
+
+    try {
+        const sentence = await Sentence.findOne({
+            _id: id,
+            user: req.user._id
+        })
+
+        if (!sentence) {
+            return res.status(404).json({ message: "Sentença nao encontrada." });
+        }
+
+        return res.status(200).json({
+            message: "Sentença recuperada com sucesso!",
+            success: true,
+            sentence
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar a sentença.",
+            success: false,
+            error: error.message
+        })
+    }
+}

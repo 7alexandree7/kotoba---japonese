@@ -5,6 +5,7 @@ import {
     updateSentece,
     deleteSentence,
     getMySentences,
+    getMySentenceById
 }
     from "../../controllers/sentences.controller";
 import { verifyToken } from "../../middlewares/verifyToken.js";
@@ -16,6 +17,8 @@ const router = Router();
 router.post("/create-sentence", verifyToken, validate(sentecesSchema), createSentence);
 router.put("/update-sentence/:id", verifyToken, validate(sentecesSchema), updateSentece);
 router.delete("/delete-sentence/:id", verifyToken, deleteSentence);
+
 router.get("/get-all-my-sentences", verifyToken, getMySentences);
+router.get("/get-sentence/:id", verifyToken, getMySentenceById);
 
 export default router;
