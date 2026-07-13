@@ -143,3 +143,61 @@ export const getMySentenceById = async (req, res) => {
         })
     }
 }
+
+export const searchMySentences = async (req, res) => {
+
+    const { search } = req.query;
+
+    if (!search) {
+        return res.status(400).json({ message: "Query de pesquisa obrigatória." });
+    }
+
+    try {
+        const senteces = await Sentence.find({
+            user: req.user._id,
+            $or: [
+                {
+                    japanese: {
+                        $regex: search,
+                        $options: "i"
+                    },
+                },
+                {
+                    meaning: {
+                        $regex: search,
+                        $options: "i"
+                    },
+
+                },
+                {
+                    translation: {
+                        $regex: search,
+                        $options: "i"
+                    },
+                }
+            ]
+        })
+
+        if (senteces.length === 0) {
+            return res.status(200).json({
+                message: `Nenhuma sentença encontrada para a query: ${search}`,
+                success: true,
+                total: 0,
+                senteces: []
+            })
+        }
+
+        return res.status(200).json({
+            message: `Sentencas encontradas para a query: ${search}`,
+            success: true,
+            total: senteces.length,
+            senteces
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar as sentencas.",
+            success: false,
+            error: error.message
+        })
+    }
+}

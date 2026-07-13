@@ -5,7 +5,9 @@ import {
     updateSentece,
     deleteSentence,
     getMySentences,
-    getMySentenceById
+    getMySentenceById,
+    searchMySentences,
+    filterSentences
 }
     from "../../controllers/sentences.controller";
 import { verifyToken } from "../../middlewares/verifyToken.js";
@@ -21,4 +23,6 @@ router.delete("/delete-sentence/:id", verifyToken, deleteSentence);
 router.get("/get-all-my-sentences", verifyToken, getMySentences);
 router.get("/get-sentence/:id", verifyToken, getMySentenceById);
 
+router.get("/search-sentences", verifyToken, searchMySentences);
+router.get("/filter-sentences", verifyToken, filterSentences);
 export default router;
