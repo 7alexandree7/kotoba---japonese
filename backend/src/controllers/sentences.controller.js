@@ -1,6 +1,6 @@
 import { Sentence } from "../models/sentences.model.js";
 
-export const createSentence = (req, res) => {
+export const createSentence = async (req, res) => {
 
     try {
         const newSentence = new Sentence({ ...req.body, user: req.user._id, nextReviewAt: new Date() });
@@ -25,7 +25,7 @@ export const updateSentece = (req, res) => {
 }
 
 
-export const updateSentece = (req, res) => {
+export const updateSentece = async (req, res) => {
 
     const { id } = req.params;
 
@@ -56,7 +56,7 @@ export const updateSentece = (req, res) => {
 }
 
 
-export const deleteSentence = (req, res) => {
+export const deleteSentence = async (req, res) => {
 
     const { id } = req.params;
 
@@ -80,6 +80,35 @@ export const deleteSentence = (req, res) => {
     } catch (error) {
         return res.status(500).json({
             message: "Erro ao excluir a sentença.",
+            success: false,
+            error: error.message
+        })
+    }
+}
+
+
+export const getMySentences = async (req, res) => {
+    try {
+        const sentences = await Sentence.find({ user: req.user._id })
+
+        if (sentences.length === 0) {
+            return res.status(200).json({
+                message: "Nenhuma sentença encontrada.",
+                success: true,
+                total: 0,
+                sentences: []
+            })
+        }
+
+        return res.status(200).json({
+            message: "Sentencas recuperadas com sucesso!",
+            success: true,
+            total: sentences.length,
+            sentences
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar as sentencas.",
             success: false,
             error: error.message
         })
