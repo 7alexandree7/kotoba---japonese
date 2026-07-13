@@ -54,3 +54,34 @@ export const updateSentece = (req, res) => {
         });
     }
 }
+
+
+export const deleteSentence = (req, res) => {
+
+    const { id } = req.params;
+
+    try {
+        const sentence = await Sentence.findOneAndDelete({
+            _id: id,
+            user: req.user._id
+        }, {
+            returnDocument: "after"
+        });
+
+        if (!sentence) {
+            return res.status(404).json({ message: "Sentença nao encontrada." });
+        }
+
+        return res.status(200).json({
+            message: "Sentença excluida com sucesso!",
+            success: true,
+            sentence
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao excluir a sentença.",
+            success: false,
+            error: error.message
+        })
+    }
+}
