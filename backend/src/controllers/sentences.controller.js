@@ -255,7 +255,24 @@ export const toggleFavoriteSentence = async (req, res) => {
             _id: id,
             user: req.user._id
         })
+
+        if (!sentence) {
+            return res.status(404).json({ message: "Sentença nao encontrada." });
+        }
+
+        sentence.isFavorite = !sentence.isFavorite;
+        await sentence.save();
+
+        return res.status(200).json({
+            message: `Sentença ${sentence.japanese} atualizada com sucesso!`,
+            success: true,
+            sentence
+        })
     } catch (error) {
-        
+        return res.status(500).json({
+            message: "Erro ao atualizar a sentença.",
+            success: false,
+            error: error.message
+        })
     }
 }
