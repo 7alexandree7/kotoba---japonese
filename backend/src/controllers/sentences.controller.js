@@ -201,3 +201,61 @@ export const searchMySentences = async (req, res) => {
         })
     }
 }
+
+
+export const filterSentences = async (req, res) => {
+
+    const { jlptLevel, difficulty } = req.query;
+
+    if (!jlptLevel && !difficulty) {
+        return res.status(400).json({ message: "Pelo menos um filtro deve ser fornecido." });
+    }
+
+    try {
+        const filter = {
+            user: req.user._id
+        }
+
+        if (jlptLevel) filter.jlptLevel = jlptLevel;
+        if (difficulty) filter.difficulty = difficulty;
+
+        const senteces = await Sentence.find(filter);
+
+        if (senteces.length === 0) {
+            return res.status(200).json({
+                message: "Nenhuma sentença encontrada com os filtros fornecidos.",
+                success: true,
+                total: 0,
+                senteces: []
+            });
+        }
+
+        return res.status(200).json({
+            message: "Sentencas filtradas com sucesso!",
+            success: true,
+            total: senteces.length,
+            senteces
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar as sentencas.",
+            success: false,
+            error: error.message
+        })
+    }
+}
+
+
+export const toggleFavoriteSentence = async (req, res) => {
+
+    const { id } = req.params;
+
+    try {
+        const sentence = await Sentence.findOne({
+            _id: id,
+            user: req.user._id
+        })
+    } catch (error) {
+        
+    }
+}
