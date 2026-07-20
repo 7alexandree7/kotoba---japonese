@@ -311,3 +311,36 @@ export const reviewSentence = async (req, res) => {
         })
     }
 }
+
+
+export const sentencesToReview = async (req, res) => {
+
+    try {
+        const sentences = await Sentence.find({
+            user: req.user._id,
+            nextReviewAt: { $lte: new Date() }
+        })
+
+        if (sentences.length === 0) {
+            return res.status(200).json({
+                message: "Nenhuma sentença para review encontrada.",
+                success: true,
+                total: 0,
+                sentences: []
+            })
+        }
+
+        return res.status(200).json({
+            message: "Sentencas para review recuperadas com sucesso!",
+            success: true,
+            total: sentences.length,
+            sentences
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar as sentencas para review.",
+            success: false,
+            error: error.message
+        })
+    }
+}

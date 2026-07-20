@@ -10,7 +10,8 @@ import {
     filterSentences,
     toggleFavoriteSentence,
     getMySentences,
-    reviewSentence
+    reviewSentence,
+    sentencesToReview,
 }
     from "../../controllers/sentences.controller";
 import { verifyToken } from "../../middlewares/verifyToken.js";
@@ -33,4 +34,5 @@ router.patch("toogle-favorite/:id", verifyToken, toggleFavoriteSentence);
 router.get("/get-my-favorite-sentences", verifyToken, getMySentences);
 
 router.patch("/review-sentence/:id", verifyToken, reviewSentence);
+router.get("/sentences-to-review", verifyToken, sentencesToReview);
 export default router;
