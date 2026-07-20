@@ -276,3 +276,38 @@ export const toggleFavoriteSentence = async (req, res) => {
         })
     }
 }
+
+
+export const reviewSentence = async (req, res) => {
+
+    const { id } = req.params;
+
+    try {
+        const sentence = await Sentence.findOne({
+            _id: id,
+            user: req.user._id
+        })
+
+        if (!sentence) {
+            return res.status(404).json({ message: "Sentença nao encontrada." });
+        }
+
+        sentence.reviewCount++
+        sentence.lastReviewedAt = new Date();
+        sentence.nextReviewAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+
+        await sentence.save();
+
+        return res.status(200).json({
+            message: `Sentença ${sentence.japanese} atualizada com sucesso!`,
+            success: true,
+            sentence
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao atualizar a sentença.",
+            success: false,
+            error: error.message
+        })
+    }
+}

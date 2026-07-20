@@ -9,6 +9,8 @@ import {
     searchMySentences,
     filterSentences,
     toggleFavoriteSentence,
+    getMySentences,
+    reviewSentence
 }
     from "../../controllers/sentences.controller";
 import { verifyToken } from "../../middlewares/verifyToken.js";
@@ -28,4 +30,7 @@ router.get("/search-sentences", verifyToken, searchMySentences);
 router.get("/filter-sentences", verifyToken, filterSentences);
 
 router.patch("toogle-favorite/:id", verifyToken, toggleFavoriteSentence);
+router.get("/get-my-favorite-sentences", verifyToken, getMySentences);
+
+router.patch("/review-sentence/:id", verifyToken, reviewSentence);
 export default router;
