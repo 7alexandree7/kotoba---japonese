@@ -344,3 +344,32 @@ export const sentencesToReview = async (req, res) => {
         })
     }
 }
+
+
+export const sentencesStats = async (req, res) => {
+
+    try {
+        const totalSentences = await Sentence.countDocuments({ user: req.user._id })
+        const favoriteSentences = await Sentence.countDocuments({ user: req.user._id, isFavorite: true })
+        const sentencesToReview = await Sentence.countDocuments({ user: req.user._id, nextReviewAt: { $lte: new Date() } })
+
+        const sentences = await Sentence.find({ user: req.user._id }, { reviewCount: 1 });
+        const totalReviews = sentences.reduce((sum, sentence) => sum + sentence.reviewCount, 0);
+
+        return res.status(200).json({
+            success: true,
+            message: "Estatísticas recuperadas com sucesso.",
+            totalSentences,
+            favoriteSentences,
+            sentencesToReview,
+            totalReviews
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar as estatísticas.",
+            success: false,
+            error: error.message
+        })
+    }
+
+}

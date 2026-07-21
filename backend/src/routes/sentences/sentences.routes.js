@@ -12,6 +12,7 @@ import {
     getMySentences,
     reviewSentence,
     sentencesToReview,
+    sentencesStats
 }
     from "../../controllers/sentences.controller";
 import { verifyToken } from "../../middlewares/verifyToken.js";
@@ -35,4 +36,5 @@ router.get("/get-my-favorite-sentences", verifyToken, getMySentences);
 
 router.patch("/review-sentence/:id", verifyToken, reviewSentence);
 router.get("/sentences-to-review", verifyToken, sentencesToReview);
+router.get("/sentences-stats", verifyToken, sentencesStats);
 export default router;
