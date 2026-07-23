@@ -161,7 +161,7 @@ export const searchMySentences = async (req, res) => {
                     },
                 },
                 {
-                    meaning: {
+                    source: {
                         $regex: search,
                         $options: "i"
                     },
@@ -278,7 +278,7 @@ export const toggleFavoriteSentence = async (req, res) => {
 
 export const getMyFavoriteSentences = async (req, res) => {
     try {
-        const sentences = await Sentences.find({ user: req.user._id, isFavorite: true })
+        const sentences = await Sentence.find({ user: req.user._id, isFavorite: true })
 
         if (sentences.length === 0) {
             return res.status(200).json({

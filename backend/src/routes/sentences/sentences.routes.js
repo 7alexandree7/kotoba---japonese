@@ -30,7 +30,7 @@ router.get("/get-sentence/:id", verifyToken, getMySentenceById);
 router.get("/search-sentences", verifyToken, searchMySentences);
 router.get("/filter-sentences", verifyToken, filterSentences);
 
-router.patch("toogle-favorite/:id", verifyToken, toggleFavoriteSentence);
+router.patch("/toogle-favorite/:id", verifyToken, toggleFavoriteSentence);
 router.get("/get-my-favorite-sentences", verifyToken, getMyFavoriteSentences);
 
 router.patch("/review-sentence/:id", verifyToken, reviewSentence);
