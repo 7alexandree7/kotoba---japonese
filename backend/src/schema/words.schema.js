@@ -3,7 +3,6 @@ import { z} from "zod";
 
 export const wordsSchema = z.object({
     japanese: z.string().trim().min(1, "Japanese word is required"),
-    reading: z.string().trim().optional(),
     meaning: z.string().trim().min(1, "Meaning is required"),
     example: z.string().trim().min(4, "Example sentence is required"),
     exampleTranslation: z.string().trim().min(4, "Example translation is required"),

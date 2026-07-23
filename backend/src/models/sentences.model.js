@@ -5,7 +5,6 @@ const sentencesSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 
     japanese: { type: String, required: true },
-    reading: { type: String },
     translation: { type: String, required: true },
 
     source: { type: String },

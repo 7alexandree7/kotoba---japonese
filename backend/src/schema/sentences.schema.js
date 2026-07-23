@@ -3,7 +3,6 @@ import { z } from "zod";
 
 export const sentecesSchema = z.object({
     japanese: z.string().trim().min(1, "Japanese sentence is required"),
-    reading: z.string().trim().optional(),
     translation: z.string().trim().min(1, "Translation is required"),
     source: z.string().trim().optional(),
     tags: z.array(z.string()).optional(),

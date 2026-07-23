@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 const wordSchema = new mongoose.Schema({
     japanese: { type: String, required: true },
-    reading: { type: String },
     meaning: { type: String, required: true },
     example: { type: String, required: true },
     notes: { type: String },
