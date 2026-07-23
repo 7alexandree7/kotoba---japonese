@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
     createSentence,
-    getMySentences,
     updateSentece,
     deleteSentence,
     getMySentences,
@@ -9,12 +8,12 @@ import {
     searchMySentences,
     filterSentences,
     toggleFavoriteSentence,
-    getMySentences,
     reviewSentence,
     sentencesToReview,
-    sentencesStats
+    sentencesStats,
+    getMyFavoriteSentences
 }
-    from "../../controllers/sentences.controller";
+    from "../../controllers/sentences.controller.js";
 import { verifyToken } from "../../middlewares/verifyToken.js";
 import { validate } from "../../middlewares/validateUser.js";
 import { sentecesSchema } from "../../schema/sentences.schema.js";
@@ -32,7 +31,7 @@ router.get("/search-sentences", verifyToken, searchMySentences);
 router.get("/filter-sentences", verifyToken, filterSentences);
 
 router.patch("toogle-favorite/:id", verifyToken, toggleFavoriteSentence);
-router.get("/get-my-favorite-sentences", verifyToken, getMySentences);
+router.get("/get-my-favorite-sentences", verifyToken, getMyFavoriteSentences);
 
 router.patch("/review-sentence/:id", verifyToken, reviewSentence);
 router.get("/sentences-to-review", verifyToken, sentencesToReview);

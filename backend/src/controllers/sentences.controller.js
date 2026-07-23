@@ -20,9 +20,7 @@ export const createSentence = async (req, res) => {
     }
 }
 
-export const updateSentece = (req, res) => {
 
-}
 
 
 export const updateSentece = async (req, res) => {
@@ -271,6 +269,35 @@ export const toggleFavoriteSentence = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             message: "Erro ao atualizar a sentença.",
+            success: false,
+            error: error.message
+        })
+    }
+}
+
+
+export const getMyFavoriteSentences = async (req, res) => {
+    try {
+        const sentences = await Sentences.find({ user: req.user._id, isFavorite: true })
+
+        if (sentences.length === 0) {
+            return res.status(200).json({
+                message: "Nenhuma sentença favorita encontrada.",
+                success: true,
+                total: 0,
+                sentences: []
+            })
+        }
+
+        return res.status(200).json({
+            message: "Sentencas favoritas recuperadas com sucesso!",
+            success: true,
+            total: sentences.length,
+            sentences
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar as sentencas favoritas.",
             success: false,
             error: error.message
         })
