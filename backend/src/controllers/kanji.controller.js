@@ -82,3 +82,25 @@ export const deleteKanji = async (req, res) => {
         })
     }
 }
+
+
+export const getKanji = async (req, res) => {
+
+    try {
+        const kanji = await Kanji.find({ user: req.user._id })
+
+        return res.status(200).json({
+            message: "Kanji recuperados com sucesso!",
+            success: true,
+            kanji
+        })
+    }
+
+    catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar os kanji.",
+            success: false,
+            error: error.message
+        })
+    }
+}
