@@ -21,3 +21,9 @@ const KanjiSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 export const Kanji = mongoose.model("Kanji", KanjiSchema)
+
+
+
+// meanings → Lista com um ou mais significados do kanji (ex.: ["Água", "Líquido"]).
+// onyomi → Lista com uma ou mais leituras chinesas (On'yomi) do kanji (ex.: ["スイ"]).
+// onyomi → Lista com uma ou mais leituras chinesas (On'yomi) do kanji (ex.: ["スイ"]).
