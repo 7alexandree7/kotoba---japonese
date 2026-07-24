@@ -27,3 +27,30 @@ export const createKanji = async (req, res) => {
         });
     }
 }
+
+
+export const updateKanji = async (req, res) => {
+
+    const { id } = req.params;
+
+    try {
+        const updatedKanji = await Kanji.findOneAndUpdate({ _id: id, user: req.user._id }, req.body, { returnDocument: "after" });
+
+        if (!updatedKanji) {
+            return res.status(404).json({ message: "Kanji nao encontrado." });
+        }
+
+        return res.status(200).json({
+            message: "Kanji atualizado com sucesso!",
+            success: true,
+            kanji: updatedKanji
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao atualizar o kanji.",
+            success: false,
+            error: error.message
+        })
+    }
+}
