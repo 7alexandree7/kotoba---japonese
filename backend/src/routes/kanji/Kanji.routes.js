@@ -6,7 +6,8 @@ import {
     createKanji,
     updateKanji,
     deleteKanji,
-    getKanji
+    getKanji,
+    getKanjiById
 
 } from "../../controllers/kanji.controller.js";
 
@@ -18,6 +19,7 @@ router.put("/update-kanji/:id", verifyToken, validate(kanjiSchema), updateKanji)
 router.delete("/delete-kanji/:id", verifyToken, deleteKanji);
 
 router.get("get-all-kanji", verifyToken , getKanji);
+router.get("get-kanji/:id", verifyToken , getKanjiById);
 
 
 export default router;
