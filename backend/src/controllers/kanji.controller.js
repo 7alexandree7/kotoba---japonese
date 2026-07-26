@@ -89,9 +89,18 @@ export const getKanji = async (req, res) => {
     try {
         const kanji = await Kanji.find({ user: req.user._id })
 
+        if (kanji.length === 0) {
+            return res.status(200).json({
+                message: "Nenhum kanji encontrado.",
+                success: true,
+                total: 0
+            })
+        }
+
         return res.status(200).json({
             message: "Kanji recuperados com sucesso!",
             success: true,
+            total: kanji.length,
             kanji
         })
     }
@@ -167,15 +176,15 @@ export const toggleFavoriteKanji = async (req, res) => {
 }
 
 
-export const getFavoriteKanji = async (req, res) => {
+export const getFavoritesKanji = async (req, res) => {
 
     try {
-        const favoriteKani = await Kanji.find({ user: req.user_id, isFavorite: true });
+        const favoritesKanji = await Kanji.find({ user: req.user_id, isFavorite: true });
 
         return res.status(200).json({
             message: "Kanji recuperados com sucesso!",
             success: true,
-            favoriteKani
+            favoriteKanji
         })
     } catch (error) {
         return res.status(500).json({
