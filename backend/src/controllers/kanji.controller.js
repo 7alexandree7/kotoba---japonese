@@ -1,3 +1,4 @@
+import { ca } from "zod/v4/locales";
 import { Kanji } from "../models/kanji.models.js"
 
 
@@ -292,6 +293,40 @@ export const filterKanji = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             message: "Erro ao filtrar os kanji.",
+            success: false,
+            error: error.message
+        })
+    }
+}
+
+
+export const reviewKanji = async (req, res) => {
+
+    const { id } = req.params;
+
+    try {
+        const kanji = await Kanji.findOneAndUpdate({ _id: id, user: req.user._id}, { returnDocument: "after" });
+
+        if (!kanji) {
+            return res.status(404).json({ message: "Kanji nao encontrado." });
+        }
+
+        kanji.reviewCount++
+        kanji.lastReviewDate = new Date();
+        kanji.nextReviewAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000); // 3 dias
+
+        await kanji.save();
+
+        return res.status(200).json({
+            message: "Kanji atualizado com sucesso!",
+            success: true,
+            kanji
+        })
+    }
+
+    catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar o kanji.",
             success: false,
             error: error.message
         })
