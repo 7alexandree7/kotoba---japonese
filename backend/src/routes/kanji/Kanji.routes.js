@@ -9,7 +9,8 @@ import {
     getKanji,
     getKanjiById,
     toggleFavoriteKanji,
-    getFavoritesKanji
+    getFavoritesKanji,
+    searchKanji
 
 } from "../../controllers/kanji.controller.js";
 
@@ -26,6 +27,7 @@ router.get("/get-kanji/:id", verifyToken , getKanjiById);
 router.patch("/toggle-favorite/:id", verifyToken, toggleFavoriteKanji);
 router.get("/get-my-favorites-kanji", verifyToken, getFavoritesKanji);
 
+router.get("/search-kanji", verifyToken, searchKanji);
 router.patch
 
 

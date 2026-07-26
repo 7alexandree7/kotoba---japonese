@@ -194,3 +194,48 @@ export const getFavoritesKanji = async (req, res) => {
         })
     }
 }
+
+
+export const searchKanji = async (req, res) => {
+
+    const { search } = req.query;
+
+    if (!search) {
+        return res.status(400).json({ message: "Query de pesquisa obrigatória." });
+    }
+
+    try {
+        const kanji = await Kanji.find({
+            user: req.user._id,
+            $or: [
+                { kanji: { $regex: search, $options: "i" } },
+                { meanings: { $regex: search, $options: "i" } },
+                { onyomi: { $regex: search, $options: "i" } },
+                { kunyomi: { $regex: search, $options: "i" } },
+            ]
+        })
+
+        if (kanji.length === 0) {
+            return res.status(200).json({
+                message: `Nenhum kanji encontrado para a query: ${search}`,
+                success: true,
+                total: 0
+            })
+        }
+
+        return res.status(200).json({
+            message: "Kanji recuperados com sucesso!",
+            success: true,
+            total: kanji.length,
+            kanji
+        })
+    }
+
+    catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar os kanji.",
+            success: false,
+            error: error.message
+        })
+    }
+}
