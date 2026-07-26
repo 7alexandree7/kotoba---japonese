@@ -244,26 +244,38 @@ export const searchKanji = async (req, res) => {
 
 export const filterKanji = async (req, res) => {
 
-    const { jlptLevel, difficulty, strokes, kanji, onyomi, kunyomi, meanings } = req.query;
+    const {
+        kanji,
+        jlptLevel,
+        meanings,
+        onyomi,
+        kunyomi,
+        strokes,
+        notes,
+        difficulty,
+        isFavorite
+    } = req.query;
 
-    if (!jlptLevel && !difficulty && !strokes && !kanji && !onyomi && !kunyomi && !meanings) {
+    if (!kanji && !jlptLevel && !meanings && !onyomi && !kunyomi && !strokes && !notes && !difficulty && !isFavorite) {
         return res.status(400).json({ message: "Pelo menos um filtro deve ser fornecido." });
     }
 
     try {
         const filter = { user: req.user._id };
 
-        if (jlptLevel) filter.jlptLevel = jlptLevel;
-        if (difficulty) filter.difficulty = difficulty;
-        if (strokes) filter.strokes = strokes;
         if (kanji) filter.kanji = kanji;
+        if (jlptLevel) filter.jlptLevel = jlptLevel;
+        if (meanings) filter.meanings = meanings;
         if (onyomi) filter.onyomi = onyomi;
         if (kunyomi) filter.kunyomi = kunyomi;
-        if (meanings) filter.meanings = meanings;
+        if (strokes) filter.strokes = strokes;
+        if (notes) filter.notes = notes;
+        if (difficulty) filter.difficulty = difficulty;
+        if (isFavorite) filter.isFavorite = isFavorite;
 
         const filteredKanji = await Kanji.find(filter);
 
-        if (filteredKanji.length == 0) {
+        if (filteredKanji.length === 0) {
             return res.status(200).json({
                 message: "Nenhum kanji encontrado com os filtros fornecidos.",
                 success: true,
@@ -272,15 +284,14 @@ export const filterKanji = async (req, res) => {
         }
 
         return res.status(200).json({
-            message: "Kanji recuperados com sucesso!",
+            message: "Kanji filtrados com sucesso!",
             success: true,
             total: filteredKanji.length,
             kanji: filteredKanji
         })
-
     } catch (error) {
         return res.status(500).json({
-            message: "Erro ao recuperar os kanji.",
+            message: "Erro ao filtrar os kanji.",
             success: false,
             error: error.message
         })
