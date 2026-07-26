@@ -261,9 +261,9 @@ export const filterKanji = async (req, res) => {
         if (kunyomi) filter.kunyomi = kunyomi;
         if (meanings) filter.meanings = meanings;
 
-        const kanji = await Kanji.find(filter);
+        const filteredKanji = await Kanji.find(filter);
 
-        if (kanji.length == 0) {
+        if (filteredKanji.length == 0) {
             return res.status(200).json({
                 message: "Nenhum kanji encontrado com os filtros fornecidos.",
                 success: true,
@@ -274,8 +274,8 @@ export const filterKanji = async (req, res) => {
         return res.status(200).json({
             message: "Kanji recuperados com sucesso!",
             success: true,
-            total: kanji.length,
-            kanji
+            total: filteredKanji.length,
+            kanji: filteredKanji
         })
 
     } catch (error) {
