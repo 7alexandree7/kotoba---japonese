@@ -305,7 +305,7 @@ export const reviewKanji = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const kanji = await Kanji.findOneAndUpdate({ _id: id, user: req.user._id}, { returnDocument: "after" });
+        const kanji = await Kanji.findOneAndUpdate({ _id: id, user: req.user._id }, { returnDocument: "after" });
 
         if (!kanji) {
             return res.status(404).json({ message: "Kanji nao encontrado." });
@@ -327,6 +327,36 @@ export const reviewKanji = async (req, res) => {
     catch (error) {
         return res.status(500).json({
             message: "Erro ao recuperar o kanji.",
+            success: false,
+            error: error.message
+        })
+    }
+}
+
+
+export const kanjisToReview = async (req, res) => {
+
+    try {
+        const kanjis = await Kanji.find({ user: req.user._id, nextReviewAt: { $lte: new Date() } });
+        // Quero todos os documentos cuja data seja menor ou igual à data de agora.
+        
+        if (kanjis.length === 0) {
+            return res.status(200).json({
+                message: "Nenhum kanji para review.",
+                success: true,
+                total: 0
+            })
+        }
+
+        return res.status(200).json({
+            message: "Kanji para review recuperados com sucesso!",
+            success: true,
+            total: kanjis.length,
+            kanjis
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar os kanji para review.",
             success: false,
             error: error.message
         })
