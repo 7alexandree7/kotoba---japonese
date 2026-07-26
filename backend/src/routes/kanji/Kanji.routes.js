@@ -13,7 +13,8 @@ import {
     searchKanji,
     filterKanji,
     reviewKanji,
-    kanjisToReview
+    kanjisToReview,
+    kanjiStats
 
 } from "../../controllers/kanji.controller.js";
 
@@ -35,6 +36,7 @@ router.get("/filter-kanji", verifyToken, filterKanji);
 
 router.get("/review-kanji/:id", verifyToken, reviewKanji);
 router.get("/kanji-to-review", verifyToken, kanjisToReview);
+router.get("/kanji-stats", verifyToken, kanjiStats);
 
 
 export default router;

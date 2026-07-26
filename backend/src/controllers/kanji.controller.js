@@ -339,7 +339,7 @@ export const kanjisToReview = async (req, res) => {
     try {
         const kanjis = await Kanji.find({ user: req.user._id, nextReviewAt: { $lte: new Date() } });
         // Quero todos os documentos cuja data seja menor ou igual à data de agora.
-        
+
         if (kanjis.length === 0) {
             return res.status(200).json({
                 message: "Nenhum kanji para review.",
@@ -361,4 +361,10 @@ export const kanjisToReview = async (req, res) => {
             error: error.message
         })
     }
+}
+
+
+
+export const kanjiStats = async (req, res) => {
+
 }
