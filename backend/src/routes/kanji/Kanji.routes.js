@@ -7,7 +7,9 @@ import {
     updateKanji,
     deleteKanji,
     getKanji,
-    getKanjiById
+    getKanjiById,
+    toggleFavoriteKanji,
+    getFavoriteKanji
 
 } from "../../controllers/kanji.controller.js";
 
@@ -18,8 +20,13 @@ router.post("/create-kanji", verifyToken, validate(kanjiSchema), createKanji);
 router.put("/update-kanji/:id", verifyToken, validate(kanjiSchema), updateKanji);
 router.delete("/delete-kanji/:id", verifyToken, deleteKanji);
 
-router.get("get-all-kanji", verifyToken , getKanji);
-router.get("get-kanji/:id", verifyToken , getKanjiById);
+router.get("/get-all-kanji", verifyToken , getKanji);
+router.get("/get-kanji/:id", verifyToken , getKanjiById);
+
+router.patch("/toggle-favorite/:id", verifyToken, toggleFavoriteKanji);
+router.get("/get-my-favorite-kanji", verifyToken, getFavoriteKanji);
+
+router.patch
 
 
 export default router;
