@@ -239,3 +239,50 @@ export const searchKanji = async (req, res) => {
         })
     }
 }
+
+
+
+export const filterKanji = async (req, res) => {
+
+    const { jlptLevel, difficulty, strokes, kanji, onyomi, kunyomi, meanings } = req.query;
+
+    if (!jlptLevel && !difficulty && !strokes && !kanji && !onyomi && !kunyomi && !meanings) {
+        return res.status(400).json({ message: "Pelo menos um filtro deve ser fornecido." });
+    }
+
+    try {
+        const filter = { user: req.user._id };
+
+        if (jlptLevel) filter.jlptLevel = jlptLevel;
+        if (difficulty) filter.difficulty = difficulty;
+        if (strokes) filter.strokes = strokes;
+        if (kanji) filter.kanji = kanji;
+        if (onyomi) filter.onyomi = onyomi;
+        if (kunyomi) filter.kunyomi = kunyomi;
+        if (meanings) filter.meanings = meanings;
+
+        const kanji = await Kanji.find(filter);
+
+        if (kanji.length == 0) {
+            return res.status(200).json({
+                message: "Nenhum kanji encontrado com os filtros fornecidos.",
+                success: true,
+                total: 0
+            })
+        }
+
+        return res.status(200).json({
+            message: "Kanji recuperados com sucesso!",
+            success: true,
+            total: kanji.length,
+            kanji
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar os kanji.",
+            success: false,
+            error: error.message
+        })
+    }
+}
