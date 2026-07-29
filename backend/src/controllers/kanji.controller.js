@@ -367,4 +367,29 @@ export const kanjisToReview = async (req, res) => {
 
 export const kanjiStats = async (req, res) => {
 
+    try {
+        const totalKanjis = await Kanji.countDocuments({ user: req.user._id })
+        const favoriteKanjis = await Kanji.countDocuments({ user: req.user._id, isFavorite: true })
+        const kanjisToReview = await Kanji.countDocuments({ user: req.user._id, nextReviewAt: { $lte: new Date() } })
+
+        const kanjis = await Kanji.find({ user: req.user._id }, { reviewCount: 1 });
+        const totalReviews = kanjis.reduce((sum, kanji) => sum + kanji.reviewCount, 0);
+
+        return res.status(200).json({
+            message: "Estatísticas recuperadas com sucesso!",
+            success: true,
+            totalKanjis,
+            favoriteKanjis,
+            kanjisToReview,
+            totalReviews
+        })
+    }
+
+    catch (error) {
+        return res.status(500).json({
+            message: "Erro ao recuperar as estatísticas.",
+            success: false,
+            error: error.message
+        })
+    }
 }
