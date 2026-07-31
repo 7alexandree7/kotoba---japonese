@@ -5,7 +5,7 @@ import { buildTranslatePrompt } from "../../prompts/translate.prompt.js";
 const groq = new Groq({ apiKey: ENV_VARIABLES.PRODUCTIONAPIKEY})
 
 
-export const translate = async ({ text, from, to }) => {
+export const translateService = async ({ text, from, to }) => {
 
     const prompt = buildTranslatePrompt({ text, from, to })
 

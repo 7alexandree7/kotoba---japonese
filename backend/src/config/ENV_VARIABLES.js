@@ -1,5 +1,4 @@
 import 'dotenv/config'
-import { process } from 'zod/v4/core'
 
 export const ENV_VARIABLES = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
