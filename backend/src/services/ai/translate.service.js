@@ -19,6 +19,6 @@ export const translateService = async ({ text, from, to }) => {
         ]
     })
 
-    return response
+    return JSON.parse(response.choices[0].message.content)
 
 }
