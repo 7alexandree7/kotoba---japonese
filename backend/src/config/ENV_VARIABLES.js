@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import { process } from 'zod/v4/core'
 
 export const ENV_VARIABLES = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
@@ -7,7 +8,8 @@ export const ENV_VARIABLES = {
     MONGO_URL: process.env.MONGO_URL,
     JWT_SECRET: process.env.JWT_SECRET,
     NODE_ENV: process.env.NODE_ENV || "development",
-    CLIENT_URL: process.env.CLIENT_URL || "http://localhost:3000"
+    CLIENT_URL: process.env.CLIENT_URL || "http://localhost:3000",
+    PRODUCTIONAPIKEY: process.env.PRODUCTIONAPIKEY
 }
 
 if (!ENV_VARIABLES.RESEND_API_KEY || !ENV_VARIABLES.RESEND_DOMAIN) {
@@ -32,4 +34,8 @@ if (!ENV_VARIABLES.NODE_ENV) {
 
 if (!ENV_VARIABLES.CLIENT_URL) {
     throw new Error("CLIENT_URL is not defined")
+}
+
+if (!ENV_VARIABLES.PRODUCTIONAPIKEY) {
+    throw new Error("PRODUCTIONAPIKEY is not defined")
 }
