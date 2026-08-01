@@ -6,3 +6,8 @@ export const translateAiSchema = z.object({
     from: z.enum(["pt", "ja"]),
     to: z.enum(["pt", "ja"]),
 })
+
+
+export const generateWordSchema = z.object({
+    word: z.string().trim().min(1, "Word is required"),
+})
