@@ -9,7 +9,7 @@ export const translate = async (req, res) => {
     }
 
     try {
-
+        
         const response = await translateService({ text, from, to })
 
         if(!response) {
@@ -17,9 +17,6 @@ export const translate = async (req, res) => {
         }
 
         return res.status(200).json(response)
-
-
-
         
     } catch (error) {
         return res.status(500).json({ message: "Server error." });
